@@ -1,50 +1,57 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Aug 23 08:53:25 2022
+Created on Thu Aug 25 21:17:55 2022
 
-@author: iit
+@author: arman hossain
 """
 
-#!usr/bin/python3
-
-import argparse
-from builder import CFGBuilder
 import ast
-import collections
-import math
 
-#%% source code
-filepath = "example2.py"
+from halstead import hal_vis
+from loc import loc_reader
+code = '''def filter_odd(numbers):
+
+    for numbe in numbersssss:
+        hi(aaa,aaaa)
+        a = a+5+3
+        a = 5
+        # a>3 and v<v
+        ok #gfdfg
+        
+        
+        if True:
+
+            yield number
+    class myclass:
+        def hell():
+            return 0'''
+
+filepath = 'example2.py'
+
 with open(filepath, 'r') as src_file:
     src = src_file.read()
+node = ast.parse(src)
+
+hall = hal_vis()
+hall.visit(node)
+# print(hall.uniq_oprds)
+for key in hall.uniq_oprds.keys():
+    print(key+"()")
+    print("-->unique operators: ",hall.uniq_oprts[key])
+    print("-->(u1): ",len(hall.uniq_oprts[key]))
+    print("-->(N1): ",hall.total_oprts[key])
+    print("-->unique operands: ",hall.uniq_oprds[key])
+    print("-->(u2): ",len(hall.uniq_oprds[key]))
+    print("-->(N2): ",hall.total_oprts[key])
+    print("-->complexit(N2): ",hall.cyclomatic[key])
+    
+# print(hall.total_oprds)
+# print(hall.uniq_oprts)
+# print(hall.total_oprts)
+print(hall.cyclomatic)
 
 
-
-# %% control flow diagram
-from staticfg import CFGBuilder
-
-cfg = CFGBuilder().build_from_file(filepath, "./"+filepath) # cfg is an ast.nodeVisitor
-
-cfg.build_visual('exampleCFG', 'png',True,False)
-
-# %% complexity
-from radon.visitors import ComplexityVisitor
-v = ComplexityVisitor.from_code(src)
-v.functions[0].complexity
-
-
-# %% halsted matrics
-
-from metrics import h_visit_src
-hal = h_visit_src(src)
-
-h1,h2,N1,N2,h,N,volume,difficulty,effort = hal[0]
-
-# from radon.visitors import HalsteadVisitor
-# vv = HalsteadVisitor.from_code(src)
-
-# %% raw line of code
-# loc, lloc, sloc, comments, multi, blank, single_comments
-from radon.raw import analyze
-metcs = analyze(src)
-loc = metcs.loc - metcs.single_comments - metcs.blank
+loc_readr = loc_reader()
+locc = loc_readr.read(src)            
+                
+            

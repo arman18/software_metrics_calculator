@@ -1,7 +1,22 @@
-def filter_odd(numbers):
+
+
+def filter_odd(numbers,n):
 
     for number in range(numbers):
-
-        if(number%2!=0):
+        '''some 
+        some
+        amar sonar bangla
+        '''
+        
+        a = 5
+        # single comment
+        if number%2!=0 :
 
             yield number 
+def another(numb):
+    while numb<10:
+        if numb%2 == 0:
+            numb+=1
+        if numb == 10:
+            numb +=5
+    return numb
