@@ -65,6 +65,12 @@ class hal_vis:
             self.initiate_context(context)
             self.update_operator([node.op.__class__.__name__],context)
             self.update_operand((node.values,),context)
+            self.cyclomatic[context] +=1
+        if type(node) == ast.With:
+            self.initiate_context(context)
+            self.update_operator(["With",":"],context)
+            self.update_operand((node.test,),context)
+            self.cyclomatic[context] +=1
         if type(node) == ast.AugAssign:
             self.initiate_context(context)
             self.update_operator([node.op.__class__.__name__],context)
@@ -89,12 +95,12 @@ class hal_vis:
             self.update_operand((node.args),context)
         if type(node) == ast.If:
             self.initiate_context(context)
-            self.update_operator(["If"],context)
+            self.update_operator(["If",":"],context)
             self.update_operand((node.test,),context)
             self.cyclomatic[context] +=1
         if type(node) == ast.While:
             self.initiate_context(context)
-            self.update_operator(["While"],context)
+            self.update_operator(["While",":"],context)
             self.update_operand((node.test,),context)
             self.cyclomatic[context] +=1
         if type(node) == ast.Return:
@@ -107,12 +113,12 @@ class hal_vis:
             self.update_operand((node.value,),context)
         if type(node) == ast.For:
             self.initiate_context(context)
-            self.update_operator(["For","In"],context)
+            self.update_operator(["For","In",":"],context)
             self.update_operand((node.target,node.iter),context)
             self.cyclomatic[context] +=1
         if type(node) == ast.FunctionDef:
             self.initiate_context(context)
-            self.update_operator(["def",node.name],context)
+            self.update_operator(["def",node.name,":"],context)
             args = []
             for arg in node.args.args:
                 args.append(arg.arg)

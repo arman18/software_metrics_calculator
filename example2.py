@@ -17,6 +17,6 @@ def another(numb):
     while numb<10:
         if numb%2 == 0:
             numb+=1
-        if numb == 10:
+        elif numb == 10:
             numb +=5
     return numb
